@@ -10,7 +10,7 @@ trade_date = pd.Timestamp('2026-01-01')
 delivery_date = pd.Timestamp('2026-06-15')
 payment_date = pd.Timestamp('2026-06-30')  # Payment 15 days post-delivery
 fixed_price = 12  # $/MMBtu
-cargo_size = 100000  # MMBtu (e.g., 100,000 MMBtu ≈ 55,000 tonnes LNG)
+cargo_size = 1000000  # MMBtu (assume 1 LNG cargo = 1,000,000 MMBtu.)
 n_simulations = 10000  # Number of Monte Carlo simulations
 confidence_level = 0.95  # 95% PFE
 
