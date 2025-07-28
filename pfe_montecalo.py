@@ -22,7 +22,7 @@ days_to_delivery = (delivery_date - trade_date).days
 
 # ===== Simulate Daily Prices =====
 np.random.seed(1234)  # For reproducibility
-## starts from standard normal distribution, generates a NumPy array of random daily returns (shape given)
+## starts from standard brownian motion, generates a NumPy array of random daily returns (shape given)
 ## daily_returns = P_t/P_{t-1} = exp{(\mu_daily - 0.5*(\sigma_daily)^2) + \sigma_daily * standard BM}
 daily_returns = np.exp(
     (annual_drift - 0.5 * annual_volatility**2) * (1/252) +
