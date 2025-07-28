@@ -1,5 +1,5 @@
 # PFE (potential future exposure) Calculation - Monto Carlo
-# Created by Jiejie Zhang, last modified on 2025/07/26.
+# Created by Jiejie Zhang, last modified on 2025/07/28.
 
 import numpy as np
 import pandas as pd
@@ -39,13 +39,13 @@ for t in range(1, days_to_delivery):
 # Pre-delivery exposure: max(0, Market Price - Fixed Price) * Cargo Size 
 exposure_pre_delivery = np.maximum(price_paths - fixed_price, 0) * cargo_size
 
-# Post-delivery exposure: Full contract value until payment
-exposure_post_delivery = np.full((n_simulations, (payment_date - delivery_date).days), fixed_price * cargo_size)
+# Post-delivery exposure: 0 - GERA GM; Full contract value until payment - counterparty
+exposure_post_delivery = np.full((n_simulations, (payment_date - delivery_date).days), 0)
 
 # Combine into full exposure matrix
-exposure = np.hstack([exposure_pre_delivery, exposure_post_delivery]) ## horizontal stack / row combine
+exposure = np.hstack([exposure_pre_delivery, exposure_post_delivery]) ## horizontal stack
 
-# ===== Compute PFE (95th percentile) =====
+# ===== Compute PFE (95th percentile) on each day=====
 pfe = np.percentile(exposure, confidence_level * 100, axis=0)
 
 # ===== Generate Dates for Plotting =====
@@ -66,4 +66,4 @@ plt.show()
 
 # ===== Output Peak PFE =====
 print(f"Peak Pre-Delivery PFE (95%): ${np.max(pfe_curve[:days_to_delivery]):,.0f}")
-print(f"Post-Delivery PFE: ${fixed_price * cargo_size:,.0f} (Credit Risk)")
+print(f"Post-Delivery PFE: 0")
