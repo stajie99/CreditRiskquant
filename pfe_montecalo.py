@@ -14,7 +14,7 @@ cargo_size = 1000000  # MMBtu (assume 1 LNG cargo = 1,000,000 MMBtu.)
 n_simulations = 10000  # Number of Monte Carlo simulations
 confidence_level = 0.95  # 95% PFE
 
-# Price model parameters (assume LNG price follows Geometric Brownian Motion)
+# Price model parameters (assume LNG price follows Geometric Brownian Motion with annual drift \mu and annualized volatility \signma)
 initial_price = 12  # $/MMBtu (equal to fixed price at inception)
 annual_volatility = 0.3  # 30% volatility (to be adjusted based on market)
 annual_drift = 0.02  # 2% annual price drift
@@ -22,10 +22,11 @@ days_to_delivery = (delivery_date - trade_date).days
 
 # ===== Simulate Daily Prices =====
 np.random.seed(1234)  # For reproducibility
-## starts from standard normal distribution, generates a NumPy array of random numbers (shape given)
+## starts from standard normal distribution, generates a NumPy array of random daily returns (shape given)
+## daily_returns = P_t/P_{t-1} = exp{(\mu_daily - 0.5*(\sigma_daily)^2) + \sigma_daily * standard BM}
 daily_returns = np.exp(
-    (annual_drift - 0.5 * annual_volatility**2) * (1/365) +
-    annual_volatility * np.sqrt(1/365) * np.random.randn(n_simulations, days_to_delivery)
+    (annual_drift - 0.5 * annual_volatility**2) * (1/252) +
+    annual_volatility * np.sqrt(1/252) * np.random.randn(n_simulations, days_to_delivery)
 )
 
 # Generate price paths
